@@ -5,7 +5,7 @@ import io
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 import uuid
-from db import engine, NSFWLog
+from db import Base, engine, NSFWLog
 
 app = FastAPI()
 
@@ -36,7 +36,6 @@ async def nsfw_detect(image: UploadFile = File(...)):
         confidence = round(nsfw_score * 100, 2)
         nsfw_detected = nsfw_score >= THRESHOLD
 
-        # Save to DB
         log = NSFWLog(
             request_id=request_id,
             timestamp=datetime.utcnow(),
@@ -61,3 +60,8 @@ async def nsfw_detect(image: UploadFile = File(...)):
 
     finally:
         db.close()
+
+
+@app.on_event("startup")
+def startup():
+    Base.metadata.create_all(bind=engine)
