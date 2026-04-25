@@ -1,8 +1,12 @@
 fastapi
 uvicorn
-transformers
-torch
+transformers==4.41.2
+torch==2.2.2
 pillow
 sqlalchemy
 psycopg2-binary
 python-multipart
+python-dotenv
+pydantic
+requests
+uvicorn
